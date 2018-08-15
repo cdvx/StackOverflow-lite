@@ -1,85 +1,53 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="description" content="Platform where users can post,view and answer questions about programming and code." />
-		<meta name="keywords" content="code,programming,computer science,programming languages" />
-		<meta name="author" content="Cedric Lusiba" />
-		<title>StackOverflow-lite</title>
-		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style2.css') }}" />
-	<body>
-		<header style="background-image:url({{url_for('static', filename="img2.jpg")}});">
-			<div class='container' id="container">
-				<div id="branding">
-					<h1><span class="highlight">Stack</span>Overflow-lite</h1>
-				</div>
-				<nav>
-					<ul>
-						<li class="current"><a href="index.html">Home</a></li>
-						<li><a href="login.html">Log in</a></li>
-						<li><a href="signUp.html">Sign Up</a></li>
-					</ul>
-				</nav>
-			</div>
-		</header>
-		<section id="content">
-			<section id="showcase">
-				<div class="container">
-					<h3>Recent questions</h3>
-					<p>
-						{% for question in questionsL %}
-						
-						<p>{{ question.question_id }} asked:</p>
-						<p>{{ question.topic }}</p>
-						<p>{{ question.body }}</p>
 
-						{% endfor %}
-					</p>
-					<!-- <p>What is Python?</p>s
-					<p>What's programming?</p>
-					<p>What are data structures?
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Vivamus nec tortor ac purus luctus lobortis id et magna.
-						Pellentesque id odio volutpat, fermentum neque non, vestibulum enim.
-						Vivamus aliquet libero quis orci mattis tincidunt.
-					</p>
-					<p>what is a program?</p>
-					<p>What is a web service?</p>
-					<p>How to write a restful API
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Vivamus nec tortor ac purus luctus lobortis id et magna.
-						Pellentesque id odio volutpat, fermentum neque non, vestibulum enim.
-						Vivamus aliquet libero quis orci mattis tincidunt.
-					</p>
-					<p>What is django
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Vivamus nec tortor ac purus luctus lobortis id et magna.
-						Pellentesque id odio volutpat, fermentum neque non, vestibulum enim.
-						Vivamus aliquet libero quis orci mattis tincidunt.
-					</p> -->
-				</div>
-		</section>
+{% extends 'layout.html' %}
 
-		<aside id="question">
-				<div class="box" style="background-image:url({{url_for('static', filename="kybrd.jpeg")}}");">
-					<div class="container">
-						<h2>Ask Question</h2>
-						<form action="/api/v1/questions" method="POST">
-							<h3>Topic</h3>
-							<input type="text" placeholder="Enter question topic/subject ">
-							<h3>Question</h3>
-							<input type="text" placeholder="Enter Question..">
-							<button type="submit" class="button_1">Post Question</button>
-							
-						</form>
-					</div>	
-				</div>
+{% block content %}
+<section id="content">
+	<section id="showcase">
+		<div class="container"> {% with messages =get_flashed_messages() %}{% if messages %}
+			<ul>
+				{% for message in messages %}
+				<li>{{ message }}</li>
+				{% endfor %}
+			</ul>
+			{% endif %}{% endwith %}
+			<strong align="center"><h2>Recent questions</h2></strong>
+			<hr style="height:2px;background-color:gray"/>
+			{% for item in questions %}
+			<p>User no. {{questions[questions.index(item)]['id']}} asked:<br />
+				Topic: {{questions[questions.index(item)]['topic']}}<br /><hr />
+				{{questions[questions.index(item)]['body']}}
+				<hr style="height:2px;background-color:rgb(33, 70, 87);"/> 
+			</p>
+			{% endfor %}
+		</div>
+</section>
+
+<aside id="question">
+	<div class="box" style="background-image:url({{url_for('static', filename="kybrd.jpeg")}});">
+	<div class="container">
+			<h2>Ask Question</h2>
+			<form action="/api/v1/questions" method="POST">
+				<P>
+					<span style="color: #ffffff; font-weight: bold;">{{form.topic.label}}</span><br />
+					{{form.topic(size=32)}}<br />
+					{% for error in form.topic.errors %}
+					<span style="color: rgb(214, 234, 243);"><b>[{{error}}]</b></span>
+					{% endfor %}
+				</P>
+				<P>
+					<span style="color: #ffffff; font-weight: bold">{{form.body.label}}</span><br />
+					{{form.body}}<br />
+					{% for error in form.topic.errors %} 
+					<span style="color:rgb(214, 234, 243)"><b>[{{error}}]</b></span>
+					{% endfor %}
+				</P>
+				<button type="submit" class="button_1">Post Question</button>
 				
-			</aside>
-
-		<footer style="background-image:url({{url_for('static', filename="img2.jpg")}}");">
-			<p>StackOverflow-lite &copy; 2018</p>
-		</footer>
-	</body>
-</html>
+			</form>
+		</div>	
+	</div>
+	
+</aside>
+{% endblock %}
+		

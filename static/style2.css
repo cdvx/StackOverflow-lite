@@ -96,14 +96,15 @@ header a:hover{
 	float: left;
 }
 
-#showcase h3{
-	text-decoration: none;
+#recent h2{
+	color:#e8491d;
 }
 
 /*content*/
 /*question box*/
 #content {
 	width: 100%;
+	border-color: #e8491d;
 }
 
 
@@ -121,11 +122,16 @@ header a:hover{
 
 }
 
-#question h2, #question h3{
+#question h2{
 	margin-top: 20px;
 	color: #ffffff;
 	font-weight: bold;
 	text-decoration:none; 
+}
+
+form label{
+	margin-top: 20px;
+	font-weight: bold;
 }
 
 #question form{
@@ -133,7 +139,7 @@ header a:hover{
 
 }
 
-#question form input{
+#question form.data{
  	min-height:30px;
  	padding:3px ;
  	width: 90%;
