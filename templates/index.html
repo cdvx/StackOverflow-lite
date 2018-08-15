@@ -7,9 +7,9 @@
 		<meta name="keywords" content="code,programming,computer science,programming languages" />
 		<meta name="author" content="Cedric Lusiba" />
 		<title>StackOverflow-lite</title>
-		<link rel="stylesheet" type="text/css" href="./css/style2.css" />
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style2.css') }}" />
 	<body>
-		<header>
+		<header style="background-image:url({{url_for('static', filename="img2.jpg")}});">
 			<div class='container' id="container">
 				<div id="branding">
 					<h1><span class="highlight">Stack</span>Overflow-lite</h1>
@@ -27,7 +27,16 @@
 			<section id="showcase">
 				<div class="container">
 					<h3>Recent questions</h3>
-					<p>What is Python?</p>s
+					<p>
+						{% for question in questionsL %}
+						
+						<p>{{ question.question_id }} asked:</p>
+						<p>{{ question.topic }}</p>
+						<p>{{ question.body }}</p>
+
+						{% endfor %}
+					</p>
+					<!-- <p>What is Python?</p>s
 					<p>What's programming?</p>
 					<p>What are data structures?
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
@@ -48,16 +57,19 @@
 						Vivamus nec tortor ac purus luctus lobortis id et magna.
 						Pellentesque id odio volutpat, fermentum neque non, vestibulum enim.
 						Vivamus aliquet libero quis orci mattis tincidunt.
-					</p>
+					</p> -->
 				</div>
 		</section>
 
 		<aside id="question">
-				<div class="box">
+				<div class="box" style="background-image:url({{url_for('static', filename="kybrd.jpeg")}}");">
 					<div class="container">
 						<h2>Ask Question</h2>
-						<form>
-							<input type="question" placeholder="Enter Question..">
+						<form action="/api/v1/questions" method="POST">
+							<h3>Topic</h3>
+							<input type="text" placeholder="Enter question topic/subject ">
+							<h3>Question</h3>
+							<input type="text" placeholder="Enter Question..">
 							<button type="submit" class="button_1">Post Question</button>
 							
 						</form>
@@ -66,7 +78,7 @@
 				
 			</aside>
 
-		<footer>
+		<footer style="background-image:url({{url_for('static', filename="img2.jpg")}}");">
 			<p>StackOverflow-lite &copy; 2018</p>
 		</footer>
 	</body>
