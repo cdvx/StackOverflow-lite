@@ -4,6 +4,5 @@ from wtforms.validators import DataRequired, ValidationError, Email, Length, Opt
 
 
 class QuestionForm(FlaskForm):
-    topic = StringField('Topic', description='Topic', validators=[Optional()])
-    body = TextAreaField('Question', description='Enter question here', 
-        validators=[DataRequired(), Length(max=250)])
+    topic = StringField('Topic', description='Topic')
+    body = TextAreaField('Question', description='Enter question here')

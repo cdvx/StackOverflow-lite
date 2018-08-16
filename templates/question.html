@@ -1,78 +1,36 @@
-<!DOCTYPE html>
-<html>
-	<head>
-		<meta charset="utf-8" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="description" content="Platform where users can post,view and answer questions about programming and code." />
-		<meta name="keywords" content="code,programming,computer science,programming languages" />
-		<meta name="author" content="Cedric Lusiba" />
-		<title>StackOverflow-lite</title>
-		<link rel="stylesheet" type="text/css" href="../static/css/question.css" />
-	<body>
-		<header>
-			<div class='container' id="container">
-				<div id="branding">
-					<h1><span class="highlight">Stack</span>Overflow-lite</h1>
-				</div>
-				<nav>
-					<ul>
-						<li class="current"><a href="index.html">Home</a></li>
-						<li><a href="signUp.html">Log in</a></li>
-						<li><a href="login.html">Sign Up</a></li>
-					</ul>
-				</nav>
-			</div>
-		</header>
-		<section id="content">
-			<section id="showcase">
-				<div class="container">
-					<h3>What are data structures in python programming?
-						please include examples and how they are used.
-					</h3>
+{% extends 'layout.html' %}
 
-					<p><h4>Answers</h4></p>
-					<p>What's programming?</p>
-					<p>What are data structures?</p>
-					<p>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Vivamus nec tortor ac purus luctus lobortis id et magna.
-						Pellentesque id odio volutpat, fermentum neque non, vestibulum enim.
-						Vivamus aliquet libero quis orci mattis tincidunt.
-					</p>
-					<p>A program is .....</p>
-					<p>data structures are ......</p>
-					<p>How to write a restful API
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Vivamus nec tortor ac purus luctus lobortis id et magna.
-						Pellentesque id odio volutpat, fermentum neque non, vestibulum enim.
-						Vivamus aliquet libero quis orci mattis tincidunt.
-					</p>
-					<p>What is django
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Vivamus nec tortor ac purus luctus lobortis id et magna.
-						Pellentesque id odio volutpat, fermentum neque non, vestibulum enim.
-						Vivamus aliquet libero quis orci mattis tincidunt.
-					</p>
-				</div>
-			</section>
+{% block content %}
+<section id="content">
+	<section id="showcase">
+		<div class="container">
+			{% for question in questions %}{% if id == questionId %}
+			<h3>
+				{{question['topic']}}<br /> 
+				{{question['body']}}<br />
+			</h3><br /><hr />
+			{% endif %}{% endfor %}
+			<p><h4>Answers</h4></p>
+			{% for answer in answersList %}{% if int(id[0])== questionId %}
+			<p>user {{id}} answered:<br /><hr />
+				{{answer['body']}}
+			</p><br /><hr />
+		</div>
+	</section>
 
-			<section id="answer">
-				<div class="box">
-					<div class="container">
-						<h2>Answer Question</h2>
-						<form>
+	<section id="answer">
+		<div class="box">
+			<div class="container">
+				<h2>Answer Question</h2>
+				<form action="{{ url_for('get_question') }} method='POST'">
+
+					<input type="answer" placeholder="Enter Answer..">
+					<button type="submit" class="button_1">Post Answer</button>
+					
+				</form>
+			</div>	
+		</div>
 		
-							<input type="answer" placeholder="Enter Answer..">
-							<button type="submit" class="button_1">Post Answer</button>
-							
-						</form>
-					</div>	
-				</div>
-				
-			</section>
-
-		<footer>
-			<p>StackOverflow-lite &copy; 2018</p>
-		</footer>
-	</body>
-</html>
+	</section>
+</section>
+{% endblock %}

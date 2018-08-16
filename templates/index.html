@@ -4,13 +4,7 @@
 {% block content %}
 <section id="content">
 	<section id="showcase">
-		<div class="container"> {% with messages =get_flashed_messages() %}{% if messages %}
-			<ul>
-				{% for message in messages %}
-				<li>{{ message }}</li>
-				{% endfor %}
-			</ul>
-			{% endif %}{% endwith %}
+		<div class="container"> 
 			<strong align="center"><h2>Recent questions</h2></strong>
 			<hr style="height:2px;background-color:gray"/>
 			{% for item in questions %}
@@ -27,15 +21,15 @@
 	<div class="box" style="background-image:url({{url_for('static', filename="kybrd.jpeg")}});">
 	<div class="container">
 			<h2>Ask Question</h2>
-			<form action="/api/v1/questions" method="POST">
-				<P>
+			<form action="{{ url_for('get_questions') }}" method="POST">
+				<p>
 					<span style="color: #ffffff; font-weight: bold;">{{form.topic.label}}</span><br />
 					{{form.topic(size=32)}}<br />
 					{% for error in form.topic.errors %}
 					<span style="color: rgb(214, 234, 243);"><b>[{{error}}]</b></span>
 					{% endfor %}
-				</P>
-				<P>
+				</p>
+				<p>
 					<span style="color: #ffffff; font-weight: bold">{{form.body.label}}</span><br />
 					{{form.body}}<br />
 					{% for error in form.topic.errors %} 
