@@ -1,19 +1,4 @@
 
-qnIds = [id for id in [question['questionId'] for question in questionsList]]
-class Answer:
-    def __init__(self, answerId=0, body='', Qn_Id=[id for id in qnIds]):
-        self.answerId = answerId
-        self.body = body
-        self.Qn_Id = Qn_Id
-
-        def __repr__(self):
-            return {
-                'answerId': self.answerId,
-                'Qn_Id': self.Qn_Id,
-                'body': self.body
-            }
-
-
 answersList = [
 {'answerId': 1,
     'Qn_Id': 1,
@@ -84,4 +69,19 @@ def createQnsList():
 
 questionsList = createQnsList()
 
+
+qnIds = [id for id in [question['questionId'] for question in questionsList]]
+class Answer:
+    def __init__(self, answerId=0, body='', Qn_Id=0):
+        self.answerId = answerId
+        self.body = body
+        self.Qn_Id = Qn_Id
+
+    def __repr__(self):
+        return {
+            'answerId': self.answerId,
+            'Qn_Id': self.Qn_Id,
+            'body': self.body
+        }
+        
 

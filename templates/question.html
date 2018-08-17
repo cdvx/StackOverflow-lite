@@ -1,34 +1,46 @@
-{% extends 'layout.html' %}
+{% extends 'layout2.html' %}
 
 {% block content %}
 <section id="content">
 	<section id="showcase">
 		<div class="container">
-			{% for question in questions %}{% if id == questionId %}
+			{% for question in questions %}{% if question['questionId'] == qId %}
 			<h3>
-				{{question['topic']}}<br /> 
+				Topic :<i>{{question['topic']}}</i><br /> 
 				{{question['body']}}<br />
 			</h3><br /><hr />
 			{% endif %}{% endfor %}
 			<p><h4>Answers</h4></p>
-			{% for answer in answersList %}{% if int(id[0])== questionId %}
-			<p>user {{id}} answered:<br /><hr />
+			{% for answer in answersL %}
+			<p>user {{answer['answerId']}} answered:<br /><hr />
 				{{answer['body']}}
 			</p><br /><hr />
+			{% endfor %}
 		</div>
 	</section>
 
 	<section id="answer">
-		<div class="box">
-			<div class="container">
-				<h2>Answer Question</h2>
-				<form action="{{ url_for('get_question') }} method='POST'">
-
-					<input type="answer" placeholder="Enter Answer..">
-					<button type="submit" class="button_1">Post Answer</button>
-					
-				</form>
-			</div>	
+		<div class="box" align='center' style="background-image:url({{url_for('static', filename="kybrd.jpeg")}}) ;">
+		<div class="container">
+			<h2>Answer Question</h2>
+			<form action="{{ url_for('get_question',questionId=qId) }}" method="POST">
+				<p>
+					<span style="color: #ffffff; font-weight: bold;">{{form.Qn_Id.label}}</span><br />
+					{{form.Qn_Id(size=32)}}<br />
+					{% for error in form.Qn_Id.errors %}
+					<span style="color: rgb(214, 234, 243);"><b>[{{error}}]</b></span>
+					{% endfor %}
+				</p>
+				<p>
+					<span style="color: #ffffff; font-weight: bold">{{form.body.label}}</span><br />
+					{{form.body}}<br />
+					{% for error in form.body.errors %} 
+					<span style="color:rgb(214, 234, 243)"><b>[{{error}}]</b></span>
+					{% endfor %}
+				</P>
+				<button type="submit" class="button_1">Post Question</button>
+			</form>
+		</div>	
 		</div>
 		
 	</section>

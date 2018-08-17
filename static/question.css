@@ -88,10 +88,9 @@ header a:hover{
 /*showcase*/
 #showcase{
 	min-height: 400px;
-	width: 90%;
-	/*background:url("../img/015.jpg") no-repeat;*/
-	/*margin:20px;*/
+	width: 100%;
 	color : black;
+	border: #e8491d;
 
 }
 
@@ -108,17 +107,17 @@ header a:hover{
 
 #answer{
 	
-	width:100%;
+	width:50%;
 }
+
 
 #answer .box{
 	/*background: grey;*/
-	align-self: center;
-	margin-left: 22.5%;
+	margin-left: 60%;
 	width:50%;
-	background:url("../img/kybrd.jpeg") repeat ;
+	background:url("{{ url_for('static', filename='kybrd.jpeg') }}") repeat ;
 	/*background-color: #35424a;*/
-	/*border-top: #35424a 4px solid;*/
+	border: #35424a 4px solid;
 	margin-bottom: 10px;
 	/*border-bottom: #35424a 4px solid;*/
 }

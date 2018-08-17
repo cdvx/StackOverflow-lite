@@ -8,7 +8,7 @@
 			<strong align="center"><h2>Recent questions</h2></strong>
 			<hr style="height:2px;background-color:gray"/>
 			{% for item in questions %}
-			<p>User no. {{questions[questions.index(item)]['id']}} asked:<br />
+			<p>User no. {{questions[questions.index(item)]['questionId']}} asked:<br />
 				Topic: {{questions[questions.index(item)]['topic']}}<br /><hr />
 				{{questions[questions.index(item)]['body']}}
 				<hr style="height:2px;background-color:rgb(33, 70, 87);"/> 
