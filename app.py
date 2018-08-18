@@ -36,10 +36,7 @@ def get_questions():
 
 @app.route('/api/v1/questions/<int:questionId>', methods=['GET', 'POST'])
 def get_question(questionId):
-    if (questionId in questionsList):
-
-    return render_template('question.html')
-
+    pass
 
 
 def post_question():
