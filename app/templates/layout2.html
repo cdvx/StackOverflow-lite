@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width" />
+		<meta name="description" content="Platform where users can post,view and answer questions about programming and code." />
+		<meta name="keywords" content="code,programming,computer science,programming languages" />
+		<meta name="author" content="Cedric Lusiba" />
+		<title>StackOverflow-lite</title>
+		<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='question.css') }}" />
+	<body>
+		<header style="background-image:url({{url_for('static', filename="img2.jpg")}});">
+			<div class='container' id="container">
+				<div id="branding">
+					<h1><span class="highlight">Stack</span>Overflow-lite</h1>
+				</div>
+				<nav>
+					<ul>
+						<li class="current"><a href="index.html">Home</a></li>
+						<li><a href="login.html">Log in</a></li>
+						<li><a href="signUp.html">Sign Up</a></li>
+					</ul>
+				</nav>{% with messages =get_flashed_messages() %}{% if messages %}
+                <ul>
+                    {% for message in messages %}
+                    <li>{{ message }}</li>
+                    {% endfor %}
+                </ul>
+                {% endif %}{% endwith %}
+			</div>
+		</header>
+		
+        {% block content %}{% endblock%}
+			
+		<footer style="background-image:url({{url_for('static', filename="img2.jpg")}}");">
+			<p>StackOverflow-lite &copy; 2018</p>
+		</footer>
+	</body>
+</html>
