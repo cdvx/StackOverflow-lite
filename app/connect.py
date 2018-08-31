@@ -1,11 +1,22 @@
+import os
+
 import psycopg2
+
+# DSN_APP = "dbname='clvx' user='postgres' host='localhost' password='Tesxting' port='5432'"
+# DSN_TESTING = "dbname='test_db' user='postgres' host='localhost' password='Tesxting' port='5432'"
 
 
 class DatabaseConnection(object):
     def __init__(self):
+        if os.getenv('APP_SETTINGS') == "testing":
+            self.dbname = "test_db"
+
+        else:
+            self.dbname = "clvx"
+
         try:
-            self.connection = psycopg2.connect(
-                "dbname='clvx' user='postgres' host='localhost' password='Tesxting' port='5432'")
+            
+            self.connection = psycopg2.connect(dbname=f"{self.dbname}", user='postgres', host='localhost', password='Tesxting', port='5432')
             self.connection.autocommit = True
             self.cursor = self.connection.cursor()
             self.last_ten_queries = []
@@ -33,6 +44,7 @@ class DatabaseConnection(object):
                 id serial PRIMARY KEY,
                 topic varchar(100) NOT NULL,
                 body varchar(600) NOT NULL,
+                author varchar(100) NOT NULL,
                 question_id varchar(150) NOT NULL
             );"""
             self.cursor.execute(create_table_command)
@@ -47,6 +59,7 @@ class DatabaseConnection(object):
                 Qn_Id varchar(150) NOT NULL,
                 body varchar(600) NOT NULL,
                 answer_id varchar(150) NOT NULL,
+                author varchar(100) NOT NULL,
                 prefered boolean
             );"""
             self.cursor.execute(create_table_command)
@@ -78,8 +91,10 @@ class DatabaseConnection(object):
                 insert_command = """INSERT INTO questions(
                     topic,
                     body,
+                    author,
                     question_id
                 ) VALUES(
+                    %s,
                     %s,
                     %s,
                     %s
@@ -87,6 +102,7 @@ class DatabaseConnection(object):
                 self.cursor.execute(insert_command, (
                     data['topic'],
                     data['body'],
+                    data['author'],
                     data['questionId'])
                 )
             elif tablename == tables[2]:
@@ -94,8 +110,10 @@ class DatabaseConnection(object):
                     Qn_Id,
                     body,
                     answer_id,
+                    author,
                     prefered
                 ) VALUES(
+                    %s,
                     %s,
                     %s,
                     %s,
@@ -105,6 +123,7 @@ class DatabaseConnection(object):
                     data['Qn_Id'],
                     data['body'],
                     data['answerId'],
+                    data['author'],
                     data['prefered'])
                 )
             else:
@@ -173,17 +192,11 @@ class DatabaseConnection(object):
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
 
+
 conn = DatabaseConnection()
 #conn.drop_table('answers')
 conn.create_Answers_table()
+#conn.drop_table('users')
 conn.create_Users_table()
+#conn.drop_table('questions')
 conn.create_Questions_table()
-
-# if not conn.tablename == 'users':
-#     conn.create_Users_table()
-# elif not conn.tablename == 'questions':
-#     conn.create_Questions_table()
-# elif not conn.tablename == 'answers':
-#     conn.create_Answers_table()
-# else:
-#     pass

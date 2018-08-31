@@ -1,6 +1,8 @@
 from flask import json
+from flask_testing import TestCase
 from tests import app
 
+from app.connect import DatabaseConnection
 from app.models import Answer, Question
 
 from .base import APITestCase, answersList, questionsList
@@ -9,6 +11,8 @@ from .base import APITestCase, answersList, questionsList
 class TestModels(APITestCase):
 
     def setUp(self):
+
+        self.conn = DatabaseConnection()
         
         self.question1 = Question('computers', 'what is python ?')
         self.question2 = Question('api', 'what is Flask ?')
@@ -19,6 +23,12 @@ class TestModels(APITestCase):
         answersList.append(self.answer1.__repr__())
 
 
+    def tearDown(self):
+        self.conn.drop_table('users')
+        self.conn.drop_table('questions')
+        self.conn.drop_table('answers')
+
+
     def test_answerList_created_properly(self):
         self.assertEqual(6, len(answersList))
         for answer in answersList:
@@ -26,11 +36,9 @@ class TestModels(APITestCase):
             self.assertIn('body', answer)
             self.assertIn('Qn_Id', answer)
 
-
     def test_answers_questions_have_uniqueIds(self):
         self.assertTrue(self.question1.id != self.question2.id)
         self.assertTrue(self.answer1.answerId != self.answer2.answerId)
-
 
     def test_question_answer_relationship(self):
         self.assertTrue(self.question1.id == self.answer1.Qn_Id)
