@@ -11,10 +11,6 @@ app.config.from_object('config.Config')
 app.config['JWT_SECRET_KEY'] = 'wuiq2739%W%$%^FhjY^^'
 jwt = JWTManager(app)
 
-@app.after_request
-def after_request(response):
-    response.headers.add('Content-Type', 'application/json')
-    return response
 
 @app.errorhandler(500)
 def internal_server_error(e):

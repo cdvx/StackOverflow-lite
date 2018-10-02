@@ -6,7 +6,7 @@ from flask_jwt_extended import (JWTManager, create_access_token,
                                 get_jwt_identity, jwt_required)
 from werkzeug.security import check_password_hash
 
-from app import (app, internal_server_error, url_unknown, after_request,
+from app import (app, internal_server_error, url_unknown,
                  method_not_allowed, forbidden_resource, deleted_resource)
 from app.connect import conn
 from app.models import (Answer, Question, User, valid_answer, valid_login_data,
