@@ -2,14 +2,14 @@ import os
 
 import psycopg2
 
-HEROKU = "postgres://qqgsttmyometag:dc3ba6007a24c3cf7109f5acec8e6919665d6d70855f4af129957975914f6212@ec2-174-129-35-61.compute-1.amazonaws.com:5432/d6k8efljnt6njb"
+HEROKU = os.environ.get('HEROKU')
 
 DATABASE_URL = os.environ['DATABASE_URL']
 
 class DatabaseConnection(object):
     def __init__(self):
         if os.getenv('APP_SETTINGS') == "testing":
-            self.dbname = "test_db"
+            self.dbname = "test_db2"
         elif DATABASE_URL == HEROKU:
             try:
                 self.connection = psycopg2.connect(DATABASE_URL, sslmode='require')
@@ -23,7 +23,7 @@ class DatabaseConnection(object):
             self.dbname = "clvx" 
 
         try:
-            
+            print("db is>>>", self.dbname)
             self.connection = psycopg2.connect(dbname=f"{self.dbname}", user='postgres', host='localhost', password='Tesxting', port='5432')
             self.connection.autocommit = True
             self.cursor = self.connection.cursor()

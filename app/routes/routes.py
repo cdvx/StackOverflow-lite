@@ -12,7 +12,8 @@ from app.connect import conn
 from app.models import (Answer, Question, User, valid_answer, valid_login_data,
                         valid_question, valid_signup_data, valid_username)
 
-origin = 'httsp://stackoverflowlite-cdvx-fronted.herokuapp.com'
+# origin = 'https://stackoverflowlite-cdvx-fronted.herokuapp.com'
+origin ="*"
 
 @app.route('/')
 def show_api_works():
@@ -50,7 +51,7 @@ def login():
             fresh=timedelta(minutes=1440)
         )
         # headers = {''}
-        msg = {'access_token': f'{access_token}'}
+        msg = {'access_token': f'{access_token}', 'username': username}
         response = make_response(jsonify(msg))
         response.headers.add('Acess-Control-Allow-Origin', origin)
         response.headers.add('Acess-Control-Allow-Headers', 'Content-Type,Authorization')
@@ -126,7 +127,6 @@ def signup():
 def get_questions():
     questionsList = conn.query_all('questions')
     questions = []
-    print(questionsList)
     if questionsList:
         for qn in questionsList:
             temp = {
@@ -190,7 +190,6 @@ def get_answers(questionId):
     questionsList = conn.query_all('questions')
     if questionsList:
         questions = [qn for qn in questionsList if int(qn[4]) == questionId]
-        print(questions)
         if questions:
             answers = []
             if answersList:
