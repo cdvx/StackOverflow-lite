@@ -4,32 +4,48 @@ import psycopg2
 
 HEROKU = os.environ.get('HEROKU')
 
-DATABASE_URL = os.environ['DATABASE_URL']
+DATABASE_URL = os.environ.get('DATABASE_URL')
 
-class DatabaseConnection(object):
+TEST_DB = os.environ.get('TEST_DB')
+
+class DatabaseConnection:
+
+    conn = lambda self: self.__class__.__call__()
+
+    def __new__(cls):
+       if not hasattr(cls, 'instance'):
+         cls.instance = super(DatabaseConnection, cls).__new__(cls)
+       return cls.instance
+
     def __init__(self):
-        if os.getenv('APP_SETTINGS') == "testing":
-            self.dbname = "test_db2"
-        elif DATABASE_URL == HEROKU:
+        testing = os.getenv('APP_SETTINGS') == "testing"
+        self.dbname =  None
+        self.dbname_ = lambda testing, db_url: TEST_DB if testing else db_url
+        self.dbname = self.dbname_(testing, DATABASE_URL)
+        
+        if (DATABASE_URL or HEROKU) and not testing:
+            self.dbname = self.dbname if DATABASE_URL else self.dbname_(testing, HEROKU)
             try:
                 self.connection = psycopg2.connect(DATABASE_URL, sslmode='require')
                 self.connection.autocommit = True
                 self.cursor = self.connection.cursor()
                 self.last_ten_queries = []
             except:
-                print("cannot connect to Heroku database")
-
+                print(f"cannot connect to database: {DATABASE_URL or HEROKU}")
         else:
-            self.dbname = "clvx" 
+            
+            self.dbname = "clvx" if not testing else self.dbname
 
         try:
-            print("db is>>>", self.dbname)
-            self.connection = psycopg2.connect(dbname=f"{self.dbname}", user='postgres', host='localhost', password='Tesxting', port='5432')
+            self.connection = psycopg2.connect(dbname=f"{self.dbname}", user='postgres', host='localhost', password='', port='5432')
             self.connection.autocommit = True
             self.cursor = self.connection.cursor()
             self.last_ten_queries = []
-        except:
-            print("Cannot connect to database.")   
+        except Exception as e:
+
+            print("Cannot connect to database.", e)   
+
+    
 
     def create_Users_table(self):
         try:
@@ -158,6 +174,23 @@ class DatabaseConnection(object):
         else:
             return queries
 
+    def get_user(self, username):
+        try:
+            SQL = """SELECT username, email, password_hash 
+                     FROM users 
+                     WHERE username = %s 
+                  """ or \
+                      """SELECT username, email, password_hash 
+                         FROM users 
+                         WHERE email = %s 
+                  """
+            self.cursor.execute(SQL, (username,))
+            user = self.cursor.fetchone()
+            return user if user else None
+            
+        except (Exception, psycopg2.DatabaseError) as error:
+            print(error)
+
     def update_question(self, new_topic, new_body, questionId):
         try:    
             update_command = """UPDATE questions SET topic = %s, body = %s 
@@ -201,11 +234,21 @@ class DatabaseConnection(object):
         except (Exception, psycopg2.DatabaseError) as error:
             print(error)
 
+    def create_all(self):
+
+        self.conn().create_Answers_table()
+        self.conn().create_Users_table()
+        self.conn().create_Questions_table()
+
+    def drop_all(self):
+        for table in ['users', 'questions', 'answers']:
+            self.conn().drop_table(table)
+
+
+
 
 conn = DatabaseConnection()
-#conn.drop_table('answers')
-conn.create_Answers_table()
-#conn.drop_table('users')
-conn.create_Users_table()
-#conn.drop_table('questions')
-conn.create_Questions_table()
+
+conn.create_all()
+conn.drop_all
+

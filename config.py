@@ -5,7 +5,8 @@ class Config(object):
     DEBUG = False
     CSRF_ENABLED = True
     SECRET = os.getenv('SECRET')
-    POSTGRES_DATABASE_URI = os.getenv('DATABASE_URL')
+    POSTGREST_DATABASE_URI = os.getenv('DATABASE_URL')
+    JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')
 
 
 class DevelopmentConfig(Config):
@@ -15,7 +16,7 @@ class DevelopmentConfig(Config):
 class TestingConfig(Config):
     DEBUG = True
     TESTING = True
-    POSTGRES_DATABASE_URI = "postgresql://postgres:sudo!localhost:5432/clvx"
+    POSTGREST_DATABASE_URI = os.environ.get('TEST_DB')
 
 
 class StagingConfig(Config):
@@ -34,3 +35,6 @@ app_config = {
     'production': ProductionConfig
 }
 
+AppConfig = TestingConfig if os.getenv('APP_SETTINGS') == 'testing' else app_config.get(
+    os.getenv('FLASK_ENV'), 
+'development')

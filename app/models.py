@@ -3,6 +3,7 @@ import uuid
 from werkzeug.security import generate_password_hash
 
 from app.connect import conn
+from app.utils import ValidationError
 
 
 class Question:
@@ -56,17 +57,16 @@ class User:
 
 
 def valid_username(username):
-    users = conn.query_all('users')
-    print(users)
-    if len(users) != 0:
-        for user in users:
-            existing_user = [user[1]
-                             for user in users if user[1] == username]
-            if not existing_user:
-                return True
-    elif len(users) == 0:
-        return True
-    return False
+    user = conn.get_user(username)
+    if user:
+        return False
+    return True
+
+def valid_email(email):
+    user = conn.get_user(email)
+    if user:
+        return False
+    return True
 
 
 def valid_question(questionObject):
@@ -102,8 +102,8 @@ def valid_answer(answerObject):
         empty_field = len(input_body.strip()) == 0
         check_type = type(input_body) == int
         if empty_field or check_type:
-            return (False, {'hint_1': "Answer body should not be empty!",
-                            'hint_2': """body and Qn_Id fileds should not contain
+            return (False, {'message': "Answer body should not be empty!"+
+                             """body and Qn_Id fileds should not contain
                             numbers only and string-type data respectively"""}
                 )
         return (True, )
@@ -113,19 +113,32 @@ def valid_answer(answerObject):
 
 def valid_signup_data(request_data):
     keys = request_data.keys()
-    condition_1 = 'username' in keys and 'email' in keys
-    condition_2 = 'password' in keys and 'repeat_password' in keys
+    email, username, password, repeat_password = (
+        request_data.get('email'),
+        request_data.get('username'),
+        request_data.get('password'),
+        request_data.get('repeat_password')
+    )
+    condition_1 = 'username' and 'email' and 'repeat_password' and 'password' in keys
+    condition_2 =  email and username and password and repeat_password
+    
     if condition_1 and condition_2:
         return True
-    else:
-        return False
+    return False
+
 
 
 def valid_login_data(request_data):
     keys = request_data.keys()
-    condition_1 = 'username' in keys and 'password' in keys
-    if condition_1:
+    email, username, password = (
+        request_data.get('email'),
+        request_data.get('username'),
+        request_data.get('password')
+    )
+    condition_1 = 'username' or 'email' in keys and 'password' in keys
+    condition_2 =  email or username and password
+    
+    if condition_1 and condition_2:
         return True
-    else:
-        return False
+    return False
 
