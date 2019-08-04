@@ -1,0 +1,23 @@
+
+from flask import Blueprint, jsonify
+
+# middleware_blueprint = Blueprint('middleware', __name__)
+
+
+class ValidationError(Exception):
+    """Base Validation class for handling validation errors"""
+
+    def __init__(self, error, status_code=None):
+        Exception.__init__(self)
+        self.status_code = 400
+        if not isinstance(error, dict):
+            self.error = error
+        else:
+            self.error['status'] = 'error' #pragma: no cover
+            self.error['message'] = error['message'] #pragma: no cover
+
+        if status_code is not None:
+            self.status_code = status_code
+
+    def to_dict(self):
+        return self.error #pragma: no cover

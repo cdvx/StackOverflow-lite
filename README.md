@@ -1,7 +1,5 @@
 # StackOverflow-lite
 
-[![Test Coverage](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/test_coverage)](https://codeclimate.com/github/codeclimate/codeclimate/test_coverage)
-
 
 ![Build](https://travis-ci.org/cdvx/StackOverflow-lite.svg?branch=Challenge-3)
 
@@ -10,7 +8,6 @@
 
 
 [![Coverage Status](https://coveralls.io/repos/github/cdvx/StackOverflow-lite/badge.svg?branch=Challenge-3)](https://coveralls.io/github/cdvx/StackOverflow-lite?branch=Challenge-3)
-
 
  
 # github pages(challenge one) output: 
