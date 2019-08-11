@@ -1,3 +1,3 @@
 from .utils import ValidationError
-from .connect import conn, DbManager
+from .db import conn, DbManager
 

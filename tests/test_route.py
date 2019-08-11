@@ -80,7 +80,6 @@ def test_user_can_get_questions(client, insert_new_records):
 
 def test_user_can_get_question(client, insert_new_records):
     questionsList = conn.query_all('questions')
-    print(questionsList)
     if questionsList :
         res = client.get(f'/api/v1/questions/{questionsList[0][4]}')
         assert 'questionId' in res.json
